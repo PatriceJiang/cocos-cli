@@ -66,7 +66,7 @@ RUN mkdir /opt/android-sdk-tmp && \
 WORKDIR /data
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
-RUN apt install -y git
+RUN apt install -y git ninja-build cmake llvm clang
 
 RUN apt clean
 CMD python -v
