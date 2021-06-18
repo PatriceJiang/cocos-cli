@@ -40,6 +40,7 @@ RUN mkdir /opt/android-ndk-tmp && \
 
 RUN mkdir -p /opt/java-tmp 
 COPY jdk-11.0.11_linux-x64_bin.deb /opt/java-tmp
+RUN apt install -y alsa-topology-conf alsa-ucm-conf libasound2 libasound2-data
 RUN cd /opt/java-tmp  && \
     dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
     apt --fix-broken install -y                 && \
@@ -53,16 +54,16 @@ ENV PATH ${JAVA_HOME}/bin:${PATH}
 # --- Android SDK
 
 RUN mkdir /opt/android-sdk-tmp && \
-    cd /opt/android-sdk-tmp 
-RUN wget -t 5 -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip 
-RUN unzip *.zip
-RUN yes | ./tools/bin/sdkmanager  --sdk_root="$ANDROID_SDK" \
+    cd /opt/android-sdk-tmp && \
+    wget -t 5 -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip  && \
+    unzip *.zip && \
+    yes | ./tools/bin/sdkmanager  --sdk_root="$ANDROID_SDK" \
             "platforms;android-27" \
             "build-tools;28.0.3" \
             "platform-tools" \
             "tools"  \
-            "cmake;3.10.2.4988404"
-RUN cd /opt && rm -rf /opt/android-sdk-tmp
+            "cmake;3.10.2.4988404" && \
+   cd /opt && rm -rf /opt/android-sdk-tmp
 
 
 
