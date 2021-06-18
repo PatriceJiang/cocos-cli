@@ -19,7 +19,7 @@ VOLUME ["/data"]
 
 RUN apt-get update 
 # install python
-RUN apt-get install -y python3 python3-pip wget unzip 
+RUN apt-get install -y python3 python3-pip wget unzip git ninja-build cmake llvm clang
 RUN python3 -m pip install Cheetah3 PyYaml
 RUN apt-get clean
 # ------------------------------------------------------
@@ -51,25 +51,23 @@ RUN mkdir /opt/java-tmp && \
 # --- Android SDK
 
 RUN mkdir /opt/android-sdk-tmp && \
-    cd /opt/android-sdk-tmp && \
-    wget -t 5 -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip && \
-    unzip *.zip && \
-    yes | ./tools/bin/sdkmanager  --sdk_root="$ANDROID_SDK" \
+    cd /opt/android-sdk-tmp 
+RUN wget -t 5 -q https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip 
+RUN unzip *.zip
+RUN yes | ./tools/bin/sdkmanager  --sdk_root="$ANDROID_SDK" \
             "platforms;android-27" \
             "build-tools;28.0.3" \
             "platform-tools" \
             "tools"  \
-            "cmake;3.10.2.4988404" && \
-    cmake_dir=$ANDROID_SDK/cmake/3.10.2.4988404/bin  && \
-    cd /opt && \
-    rm -rf /opt/android-sdk-tmp
+            "cmake;3.10.2.4988404"
+RUN cd /opt && rm -rf /opt/android-sdk-tmp
 
 
 
 WORKDIR /data
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 
-RUN apt install -y git ninja-build cmake llvm clang
+# RUN apt install -y 
 
 RUN apt clean
 CMD python -v
