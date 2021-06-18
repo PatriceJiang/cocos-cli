@@ -38,9 +38,10 @@ RUN mkdir /opt/android-ndk-tmp && \
 
 # --- Oracle JDK 11
 
-RUN mkdir -p /opt/java-tmp && cd /opt/java-tmp 
+RUN mkdir -p /opt/java-tmp 
 COPY jdk-11.0.11_linux-x64_bin.deb /opt/java-tmp
-RUN dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
+RUN cd /opt/java-tmp  && \
+    dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
     apt --fix-broken install -y                 && \
     cd /opt                                     && \
     rm -rf /opt/java-tmp
