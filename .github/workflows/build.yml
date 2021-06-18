@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on: [push, pull_request]
+
+jobs:
+
+  build-docker:
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/checkout@v2
+    - name: docker login
+      env: 
+        DOCKER_USER: ${{secret.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secret.DOCKER_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build & Push
+      env: 
+        DOCKER_USER: ${{secret.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secret.DOCKER_PASSWORD}}
+      run: |
+        docker build . --file Dockerfile --tag plutoo/docker-cli:$(date +%s)
+        docker push $DOCKER_USER/cocos-cli
