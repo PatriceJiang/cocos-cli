@@ -19,5 +19,7 @@ jobs:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
-        docker build . --file Dockerfile --tag plutoo/docker-cli:$(date +%s)
+        # docker build --file Dockerfile --tag plutoo/docker-cli:$(date +%s)
+        docker build -t cocos-cli . 
+        docker tag cocos-cli plutoo/cocos-cli
         docker push $DOCKER_USER/cocos-cli
