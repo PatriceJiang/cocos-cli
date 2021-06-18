@@ -7,7 +7,7 @@ ENV ANDROID_NDK_HOME /opt/android-ndk
 ENV ANDROID_NDK_VERSION r21
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
 ENV ANDROID_SDK /opt/android-sdk
-ENV JAVA_HOME /opt/jvm/jdk-10.0.2
+# ENV JAVA_HOME /opt/jvm/jdk-10.0.2
 ENV PATH ${JAVA_HOME}/bin:${PATH}
 
 STOPSIGNAL SIGTERM
@@ -40,13 +40,19 @@ RUN mkdir /opt/android-ndk-tmp && \
 # add to PATH
 # --- Open JDK 
 
-RUN mkdir /opt/java-tmp && \
-    mkdir /opt/jvm && \
-    cd /opt/java-tmp && \
-    wget https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
-    tar xfv openjdk.tar.gz --directory /opt/jvm && \
-    cd /opt && \
-    rm -rf /opt/java-tmp
+# RUN mkdir /opt/java-tmp && \
+#     mkdir /opt/jvm && \
+#     cd /opt/java-tmp && \
+#     wget https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
+#     tar xfv openjdk.tar.gz --directory /opt/jvm && \
+#     cd /opt && \
+#     rm -rf /opt/java-tmp
+
+RUN apt-get install java-common gnupg2 -y
+RUN echo "oracle-java11-installer shared/accepted-oracle-license-v1-2 select true" | debconf-set-selections
+RUN echo "deb http://ppa.launchpad.net/linuxuprising/java/ubuntu bionic main" | tee /etc/apt/sources.list.d/linuxuprising-java.list
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 73C3DB2A
+RUN apt-get update && apt-get install -y --no-install-recommends oracle-java11-installer
 
 # --- Android SDK
 
