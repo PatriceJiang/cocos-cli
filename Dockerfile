@@ -36,24 +36,16 @@ RUN mkdir /opt/android-ndk-tmp && \
     cd ${ANDROID_NDK_HOME} && \
     rm -rf /opt/android-ndk-tmp
 
-# add to PATH
-# --- Open JDK 
+# --- Oracle JDK 11
 
-# RUN mkdir /opt/java-tmp && \
-#     mkdir /opt/jvm && \
-#     cd /opt/java-tmp && \
-#     wget https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
-#     tar xfv openjdk.tar.gz --directory /opt/jvm && \
-#     cd /opt && \
-#     rm -rf /opt/java-tmp
+RUN mkdir -p /opt/java-tmp && cd /opt/java-tmp 
+COPY jdk-11.0.11_linux-x64_bin.deb /opt/java-tmp
+RUN dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
+    apt --fix-broken install -y                 && \
+    cd /opt                                     && \
+    rm -rf /opt/java-tmp
 
-RUN \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -y oracle-java8-installer
-
-ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+ENV JAVA_HOME /usr/lib/jvm/jdk-11.0.11
 ENV PATH ${JAVA_HOME}/bin:${PATH}
 
 
