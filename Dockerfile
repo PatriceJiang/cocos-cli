@@ -8,7 +8,6 @@ ENV ANDROID_NDK_VERSION r21
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
 ENV ANDROID_SDK /opt/android-sdk
 # ENV JAVA_HOME /opt/jvm/jdk-10.0.2
-ENV PATH ${JAVA_HOME}/bin:${PATH}
 
 STOPSIGNAL SIGTERM
 
@@ -48,11 +47,17 @@ RUN mkdir /opt/android-ndk-tmp && \
 #     cd /opt && \
 #     rm -rf /opt/java-tmp
 
-RUN apt-get install java-common gnupg2 -y
-RUN echo "oracle-java11-installer shared/accepted-oracle-license-v1-2 select true" | debconf-set-selections
-RUN echo "deb http://ppa.launchpad.net/linuxuprising/java/ubuntu bionic main" | tee /etc/apt/sources.list.d/linuxuprising-java.list
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 73C3DB2A
-RUN apt-get update && apt-get install -y --no-install-recommends oracle-java11-installer
+RUN \
+  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  add-apt-repository -y ppa:webupd8team/java && \
+  apt-get update && \
+  apt-get install -y oracle-java8-installer && \
+  rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/cache/oracle-jdk8-installer
+
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+ENV PATH ${JAVA_HOME}/bin:${PATH}
+
 
 # --- Android SDK
 
