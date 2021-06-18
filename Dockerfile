@@ -7,7 +7,7 @@ ENV ANDROID_NDK_HOME /opt/android-ndk
 ENV ANDROID_NDK_VERSION r21
 ENV PATH ${PATH}:${ANDROID_NDK_HOME}
 ENV ANDROID_SDK /opt/android-sdk
-ENV JAVA_HOME /opt/jvm/jdk-16.0.1
+ENV JAVA_HOME /opt/jvm/jdk-10.0.2
 ENV PATH ${JAVA_HOME}/bin:${PATH}
 
 STOPSIGNAL SIGTERM
@@ -43,7 +43,7 @@ RUN mkdir /opt/android-ndk-tmp && \
 RUN mkdir /opt/java-tmp && \
     mkdir /opt/jvm && \
     cd /opt/java-tmp && \
-    wget https://download.java.net/java/GA/jdk16.0.1/7147401fd7354114ac51ef3e1328291f/9/GPL/openjdk-16.0.1_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
+    wget https://download.java.net/java/GA/jdk10/10.0.2/19aef61b38124481863b1413dce1855f/13/openjdk-10.0.2_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
     tar xfv openjdk.tar.gz --directory /opt/jvm && \
     cd /opt && \
     rm -rf /opt/java-tmp
