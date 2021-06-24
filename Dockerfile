@@ -38,18 +38,29 @@ RUN mkdir /opt/android-ndk-tmp && \
 
 # --- Oracle JDK 11
 
-RUN mkdir -p /opt/java-tmp 
-COPY jdk-11.0.11_linux-x64_bin.deb /opt/java-tmp
-RUN apt install -y alsa-topology-conf alsa-ucm-conf libasound2 libasound2-data
-RUN cd /opt/java-tmp  && \
-    dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
-    apt --fix-broken install -y                 && \
-    cd /opt                                     && \
+# RUN mkdir -p /opt/java-tmp 
+# COPY jdk-11.0.11_linux-x64_bin.deb /opt/java-tmp
+# RUN apt install -y alsa-topology-conf alsa-ucm-conf libasound2 libasound2-data
+# RUN cd /opt/java-tmp  && \
+#     dpkg -i jdk-11.0.11_linux-x64_bin.deb       && \
+#     apt --fix-broken install -y                 && \
+#     cd /opt                                     && \
+#     rm -rf /opt/java-tmp
+
+# ENV JAVA_HOME /usr/lib/jvm/jdk-11.0.11
+# ENV PATH ${JAVA_HOME}/bin:${PATH}
+
+# ---- openjdk ----
+RUN mkdir /opt/java-tmp && \
+    mkdir /opt/jvm && \
+    cd /opt/java-tmp && \
+    wget https://download.java.net/java/GA/jdk16.0.1/7147401fd7354114ac51ef3e1328291f/9/GPL/openjdk-16.0.1_linux-x64_bin.tar.gz -O openjdk.tar.gz && \
+    tar xfv openjdk.tar.gz --directory /opt/jvm && \
+    cd /opt && \
     rm -rf /opt/java-tmp
 
-ENV JAVA_HOME /usr/lib/jvm/jdk-11.0.11
+ENV JAVA_HOME /opt/jvm/jdk-16.0.1
 ENV PATH ${JAVA_HOME}/bin:${PATH}
-
 
 # --- Android SDK
 
